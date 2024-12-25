@@ -307,7 +307,6 @@
 
 
     <script>
-        // Logger utility object
 // Logger utility object
 const Logger = {
     log: function(type, title, details = null) {
@@ -418,29 +417,13 @@ async function handleFormSubmit(event) {
         formData.forEach((value, key) => formDataObj[key] = value);
         Logger.log('INFO', 'Form data prepared', formDataObj);
 
-        // Make sure the form action is correct
+        // Save form data to localStorage before submission
+        localStorage.setItem('lastFormSubmission', JSON.stringify(formDataObj));
+
+        // Submit the form directly to Zoho
         form.action = 'https://crm.zoho.in/crm/WebToCustomModule1';
         form.method = 'POST';
-
-        // Create a temporary iframe for form submission
-        const iframe = document.createElement('iframe');
-        iframe.name = 'submit_iframe';
-        iframe.style.display = 'none';
-        document.body.appendChild(iframe);
-
-        // Set up form target and submit
-        form.target = 'submit_iframe';
         form.submit();
-
-        // Handle success after a brief delay
-        setTimeout(() => {
-            // Clean up
-            document.body.removeChild(iframe);
-            submitButton.disabled = false;
-            
-            // Redirect to success page
-            window.location.href = form.returnURL.value;
-        }, 2000);
 
         // Log success
         Logger.log('SUCCESS', 'Form submitted', {
@@ -466,6 +449,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const success = getUrlParameter('success');
     if (success === 'true') {
         showToast('Thank you for your review!', 'success');
+        // Clear stored form data
+        localStorage.removeItem('lastFormSubmission');
     }
 
     // Add form submit event listener
