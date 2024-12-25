@@ -90,13 +90,40 @@
             background: #e9ecef;
         }
 
-        .rating-select {
-            padding: 0.8rem;
-            border-radius: 10px;
-            border: 2px solid #eee;
-            width: 100%;
-            background: #f8f9fa;
-            font-size: 1rem;
+        /* Star Rating Styles */
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 2rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s ease-in-out;
+        }
+
+        .rating label:hover,
+        .rating label:hover ~ label,
+        .rating input:checked ~ label {
+            color: #FFD700;
+        }
+
+        .invalid-feedback {
+            display: none;
+            color: var(--gradient-start);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .was-validated .form-control:invalid ~ .invalid-feedback {
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -115,38 +142,46 @@
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
             
-            <form action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return checkMandatory820771000000372329()' accept-charset='UTF-8'>
-                <input type='text' style='display:none;' name='xnQsjsdp' value='71a555a2f24d4c8db2d6b3cef55b45538b0907704eae56431f62a09858142856'></input> 
+            <form id="reviewForm" action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return validateForm()' accept-charset='UTF-8' novalidate>
+                <input type='text' style='display:none;' name='xnQsjsdp' value='c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c'></input>
                 <input type='hidden' name='zc_gad' id='zc_gad' value=''></input>
-                <input type='text' style='display:none;' name='xmIwtLD' value='7ab2f7bf59c73fab4ce56e76b9cbe2d5b7a9d88c8abfc08efc706ca987c253ad7bef18f3a1f994c92816e228570eb3a5'></input> 
+                <input type='text' style='display:none;' name='xmIwtLD' value='eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736'></input>
                 <input type='text' style='display:none;' name='actionType' value='Q3VzdG9tTW9kdWxlMQ=='></input>
                 <input type='text' style='display:none;' name='returnURL' value='https://al-go12.github.io/qr-project/sucess'></input>
 
                 <div class="mb-4">
                     <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120">
+                    <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120" required>
+                    <div class="invalid-feedback">Please enter your name.</div>
                 </div>
 
                 <div class="mb-4">
                     <label for="COBJ1CF2" class="form-label">WhatsApp Number <span class="required">*</span></label>
-                    <input type="text" class="form-control" id="COBJ1CF2" name="COBJ1CF2" maxlength="30">
+                    <input type="tel" class="form-control" id="COBJ1CF2" name="COBJ1CF2" pattern="[0-9]{10}" maxlength="10" required>
+                    <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
                 </div>
 
                 <div class="mb-4">
-                    <label for="COBJ1CF3" class="form-label">Rating <span class="required">*</span></label>
-                    <select class="rating-select" id="COBJ1CF3" name="COBJ1CF3" onChange='addAriaSelected820771000000372329()'>
-                        <option value="-None-">-None-</option>
-                        <option value="⭐ (1 Star)">⭐ (1 Star)</option>
-                        <option value="⭐⭐ (2 Stars)">⭐⭐ (2 Stars)</option>
-                        <option value="⭐⭐⭐ (3 Stars)">⭐⭐⭐ (3 Stars)</option>
-                        <option value="⭐⭐⭐⭐ (4 Stars)">⭐⭐⭐⭐ (4 Stars)</option>
-                        <option value="⭐⭐⭐⭐⭐ (5 Stars)">⭐⭐⭐⭐⭐ (5 Stars)</option>
-                    </select>
+                    <label class="form-label">Rating <span class="required">*</span></label>
+                    <div class="rating">
+                        <input type="radio" id="star5" name="COBJ1CF3" value="⭐⭐⭐⭐⭐ (5 Stars)" required>
+                        <label for="star5" class="fa fa-star"></label>
+                        <input type="radio" id="star4" name="COBJ1CF3" value="⭐⭐⭐⭐ (4 Stars)">
+                        <label for="star4" class="fa fa-star"></label>
+                        <input type="radio" id="star3" name="COBJ1CF3" value="⭐⭐⭐ (3 Stars)">
+                        <label for="star3" class="fa fa-star"></label>
+                        <input type="radio" id="star2" name="COBJ1CF3" value="⭐⭐ (2 Stars)">
+                        <label for="star2" class="fa fa-star"></label>
+                        <input type="radio" id="star1" name="COBJ1CF3" value="⭐ (1 Star)">
+                        <label for="star1" class="fa fa-star"></label>
+                    </div>
+                    <div class="invalid-feedback">Please select a rating.</div>
                 </div>
 
                 <div class="mb-4">
                     <label for="COBJ1CF1" class="form-label">Review Description <span class="required">*</span></label>
-                    <textarea class="form-control" id="COBJ1CF1" name="COBJ1CF1" rows="4"></textarea>
+                    <textarea class="form-control" id="COBJ1CF1" name="COBJ1CF1" rows="4" required></textarea>
+                    <div class="invalid-feedback">Please enter your review.</div>
                 </div>
 
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -158,39 +193,45 @@
     </div>
 
     <script>
-        function addAriaSelected820771000000372329() {
-            var optionElem = event.target;
-            var previousSelectedOption = optionElem.querySelector('[aria-selected=true]');
-            if(previousSelectedOption) {
-                previousSelectedOption.removeAttribute('aria-selected');
-            }
-            optionElem.querySelectorAll('option')[optionElem.selectedIndex].ariaSelected = 'true';
-        }
+        function validateForm() {
+            const form = document.getElementById('reviewForm');
+            form.classList.add('was-validated');
 
-        function checkMandatory820771000000372329() {
-            var mndFileds = new Array('NAME','COBJ1CF1','COBJ1CF2','COBJ1CF3');
-            var fldLangVal = new Array('Customer Name','Review Description','WhatsApp Number','Rating');
-            for(i=0;i<mndFileds.length;i++) {
-                var fieldObj=document.forms['WebForm820771000000372329'][mndFileds[i]];
-                if(fieldObj) {
-                    if (((fieldObj.value).replace(/^\s+|\s+$/g, '')).length==0) {
-                        alert(fldLangVal[i] +' cannot be empty.'); 
-                        fieldObj.focus();
-                        return false;
-                    } else if(fieldObj.nodeName=='SELECT') {
-                        if(fieldObj.options[fieldObj.selectedIndex].value=='-None-') {
-                            alert(fldLangVal[i] +' cannot be none.'); 
-                            fieldObj.focus();
-                            return false;
-                        }
-                    }
-                }
+            // Check name
+            const name = document.getElementById('NAME');
+            if (!name.value.trim()) {
+                return false;
             }
+
+            // Check WhatsApp number
+            const whatsapp = document.getElementById('COBJ1CF2');
+            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
+                return false;
+            }
+
+            // Check rating
+            const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
+            if (!rating) {
+                return false;
+            }
+
+            // Check review description
+            const review = document.getElementById('COBJ1CF1');
+            if (!review.value.trim()) {
+                return false;
+            }
+
             return true;
         }
+
+        // Reset validation state when form is reset
+        document.querySelector('.btn-reset').addEventListener('click', function() {
+            const form = document.getElementById('reviewForm');
+            form.classList.remove('was-validated');
+        });
     </script>
-    
+
     <!-- Zoho Analytics Script -->
-    <script id='wf_anal' src='https://crm.zohopublic.in/crm/WebFormAnalyticsServeServlet?rid=da934db503f0c86a9f40ee967a02995c19b40f98b2a2e10fe128d756d2b37ec8f23d0178fd24745041cb38a7039b3ab8gidb50ea65652645a4e85fde1a8fd08cea06bf6d84d9832c9a9f65f4a16616069b3gida13ad099df73320193409bc38cddbc58137ba6d6b453153e7c4bbb8ed95deb47giddc3308f2ccfffa4cf171e75c6d7d7f8c6648e60f62039f074c070027bbc67b1c&tw=048ddd9b6c9d0cf33bf19de50a9b5cc40aacf451aec7828da706abdceb36e71b'></script>
+    <script id='wf_anal' src='https://crm.zohopublic.in/crm/WebFormAnalyticsServeServlet?rid=55c81697c45c5af524bdafbb5bb65684c0ec60d05ca1132c6f88638c1750ae8fad81f20ccfcb7c09eca17cc3dd599dc4gid1da8298a7adf475851390d0d8c3f052e3e5c4a184dd0ffd7dfb1a7206d22b851gid0291d264530a0e5eb3405d6fc82f426e274793cae41d613dbf8e8021b23caf94gid3a4ceed36ebe109c23bfc222de263b804ab3b7d28d9f8b5ce26b73a27c491ae5&tw=650bf2097331801de1b0a263fb8a51cac9960ed80155a51ada64812f4c11f73c'></script>
 </body>
 </html>
