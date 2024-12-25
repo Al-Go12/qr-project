@@ -227,85 +227,76 @@
         </div>
     </div>
 
-    <script>
-        // Show loading overlay
-        function showLoading() {
-            document.getElementById('loadingOverlay').style.display = 'flex';
-        }
-
-        // Hide loading overlay
-        function hideLoading() {
-            document.getElementById('loadingOverlay').style.display = 'none';
-        }
-
-        // Handle rating selection
-        document.querySelectorAll('input[name="rating"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                document.getElementById('ratingValue').value = this.value;
-            });
-        });
-
-        // Form submission handler
+   <script>
         function handleSubmit(event) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent immediate form submission
+            
             const form = document.getElementById('reviewForm');
             form.classList.add('was-validated');
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('NAME').value.trim(),
+                whatsapp: document.getElementById('COBJ1CF2').value,
+                rating: document.querySelector('input[name="COBJ1CF3"]:checked')?.value,
+                review: document.getElementById('COBJ1CF1').value.trim()
+            };
 
-            // Validate name
-            const name = document.getElementById('NAME');
-            if (!name.value.trim()) {
-                name.focus();
+            // Validation checks
+            let errors = [];
+            
+            if (!formData.name) {
+                errors.push('Name is required');
+            }
+            
+            if (!/^[0-9]{10}$/.test(formData.whatsapp)) {
+                errors.push('Please enter a valid 10-digit WhatsApp number');
+            }
+            
+            if (!formData.rating) {
+                errors.push('Please select a rating');
+            }
+            
+            if (!formData.review) {
+                errors.push('Review description is required');
+            }
+
+            // If there are errors, log them and prevent submission
+            if (errors.length > 0) {
+                console.error('Validation errors:', errors);
                 return false;
             }
 
-            // Validate WhatsApp number
-            const whatsapp = document.getElementById('COBJ1CF2');
-            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
-                whatsapp.focus();
-                return false;
-            }
-
-            // Validate rating
-            const rating = document.querySelector('input[name="rating"]:checked');
-            if (!rating) {
-                return false;
-            }
-
-            // Validate review description
-            const review = document.getElementById('COBJ1CF1');
-            if (!review.value.trim()) {
-                review.focus();
-                return false;
-            }
-
-            // Show loading overlay
-            showLoading();
-
-            // Submit form
+            // If validation passes, log success and allow form submission
+            console.log('Form data:', formData);
+            
+            // Submit the form programmatically
             try {
-                form.submit();
-                return true;
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('Form submitted successfully');
+                    window.location.href = document.querySelector('input[name="returnURL"]').value;
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                });
             } catch (error) {
-                console.error('Form submission error:', error);
-                hideLoading();
-                alert('An error occurred while submitting the form. Please try again.');
-                return false;
+                console.error('Submission error:', error);
             }
+
+            return false; // Prevent default form submission
         }
 
-        // Reset form handler
+        // Reset validation state when form is reset
         document.querySelector('.btn-reset').addEventListener('click', function() {
             const form = document.getElementById('reviewForm');
             form.classList.remove('was-validated');
-            document.getElementById('ratingValue').value = '';
-            hideLoading();
-        });
-
-        // Initialize form
-        document.addEventListener('DOMContentLoaded', function() {
-            // Clear any previous form data
-            document.getElementById('reviewForm').reset();
-            document.getElementById('ratingValue').value = '';
         });
     </script>
 
@@ -313,3 +304,4 @@
     <script id='wf_anal' src='https://crm.zohopublic.in/crm/WebFormAnalyticsServeServlet?rid=55c81697c45c5af524bdafbb5bb65684c0ec60d05ca1132c6f88638c1750ae8fad81f20ccfcb7c09eca17cc3dd599dc4gid1da8298a7adf475851390d0d8c3f052e3e5c4a184dd0ffd7dfb1a7206d22b851gid0291d264530a0e5eb3405d6fc82f426e274793cae41d613dbf8e8021b23caf94gid3a4ceed36ebe109c23bfc222de263b804ab3b7d28d9f8b5ce26b73a27c491ae5&tw=650bf2097331801de1b0a263fb8a51cac9960ed80155a51ada64812f4c11f73c'></script>
 </body>
 </html>
+
