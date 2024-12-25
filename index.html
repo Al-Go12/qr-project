@@ -7,7 +7,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
         :root {
             --gradient-start: #FF416C;
             --gradient-end: #FF4B2B;
@@ -91,6 +90,7 @@
             background: #e9ecef;
         }
 
+        /* Star Rating Styles */
         .rating {
             display: flex;
             flex-direction: row-reverse;
@@ -135,53 +135,19 @@
                 padding: 1.5rem;
             }
         }
-
-        /* Loading indicator styles */
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--gradient-start);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
-    <!-- Loading overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
-
     <div class="container">
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
             
-            <form id="reviewForm" action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return handleSubmit(event)' accept-charset='UTF-8'>
-                <!-- Hidden fields with correct values -->
-                <input type='text' style='display:none;' name='xnQsjsdp' value='c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c'>
-                <input type='hidden' name='zc_gad' id='zc_gad' value=''>
-                <input type='text' style='display:none;' name='xmIwtLD' value='eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736'>
-                <input type='text' style='display:none;' name='actionType' value='Q3VzdG9tTW9kdWxlMQ=='>
-                <input type='text' style='display:none;' name='returnURL' value=''>
+            <form id="reviewForm" action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return validateForm()' accept-charset='UTF-8' novalidate>
+                <input type='text' style='display:none;' name='xnQsjsdp' value='c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c'></input>
+                <input type='hidden' name='zc_gad' id='zc_gad' value=''></input>
+                <input type='text' style='display:none;' name='xmIwtLD' value='eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736'></input>
+                <input type='text' style='display:none;' name='actionType' value='Q3VzdG9tTW9kdWxlMQ=='></input>
+                <input type='text' style='display:none;' name='returnURL' value='https://al-go12.github.io/qr-project/sucess'></input>
 
                 <div class="mb-4">
                     <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
@@ -197,17 +163,16 @@
 
                 <div class="mb-4">
                     <label class="form-label">Rating <span class="required">*</span></label>
-                    <input type="hidden" id="ratingValue" name="COBJ1CF3" required>
                     <div class="rating">
-                        <input type="radio" id="star5" name="rating" value="⭐⭐⭐⭐⭐ (5 Stars)" required>
+                        <input type="radio" id="star5" name="COBJ1CF3" value="⭐⭐⭐⭐⭐ (5 Stars)" required>
                         <label for="star5" class="fa fa-star"></label>
-                        <input type="radio" id="star4" name="rating" value="⭐⭐⭐⭐ (4 Stars)">
+                        <input type="radio" id="star4" name="COBJ1CF3" value="⭐⭐⭐⭐ (4 Stars)">
                         <label for="star4" class="fa fa-star"></label>
-                        <input type="radio" id="star3" name="rating" value="⭐⭐⭐ (3 Stars)">
+                        <input type="radio" id="star3" name="COBJ1CF3" value="⭐⭐⭐ (3 Stars)">
                         <label for="star3" class="fa fa-star"></label>
-                        <input type="radio" id="star2" name="rating" value="⭐⭐ (2 Stars)">
+                        <input type="radio" id="star2" name="COBJ1CF3" value="⭐⭐ (2 Stars)">
                         <label for="star2" class="fa fa-star"></label>
-                        <input type="radio" id="star1" name="rating" value="⭐ (1 Star)">
+                        <input type="radio" id="star1" name="COBJ1CF3" value="⭐ (1 Star)">
                         <label for="star1" class="fa fa-star"></label>
                     </div>
                     <div class="invalid-feedback">Please select a rating.</div>
@@ -227,70 +192,36 @@
         </div>
     </div>
 
-   <script>
-        function handleSubmit(event) {
-            event.preventDefault(); // Prevent immediate form submission
-            
+    <script>
+        function validateForm() {
             const form = document.getElementById('reviewForm');
             form.classList.add('was-validated');
-            
-            // Collect form data
-            const formData = {
-                name: document.getElementById('NAME').value.trim(),
-                whatsapp: document.getElementById('COBJ1CF2').value,
-                rating: document.querySelector('input[name="COBJ1CF3"]:checked')?.value,
-                review: document.getElementById('COBJ1CF1').value.trim()
-            };
 
-            // Validation checks
-            let errors = [];
-            
-            if (!formData.name) {
-                errors.push('Name is required');
-            }
-            
-            if (!/^[0-9]{10}$/.test(formData.whatsapp)) {
-                errors.push('Please enter a valid 10-digit WhatsApp number');
-            }
-            
-            if (!formData.rating) {
-                errors.push('Please select a rating');
-            }
-            
-            if (!formData.review) {
-                errors.push('Review description is required');
-            }
-
-            // If there are errors, log them and prevent submission
-            if (errors.length > 0) {
-                console.error('Validation errors:', errors);
+            // Check name
+            const name = document.getElementById('NAME');
+            if (!name.value.trim()) {
                 return false;
             }
 
-            // If validation passes, log success and allow form submission
-            console.log('Form data:', formData);
-            
-            // Submit the form programmatically
-            try {
-                fetch(form.action, {
-                    method: 'POST',
-                    body: new FormData(form)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    console.log('Form submitted successfully');
-                    window.location.href = document.querySelector('input[name="returnURL"]').value;
-                })
-                .catch(error => {
-                    console.error('Error submitting form:', error);
-                });
-            } catch (error) {
-                console.error('Submission error:', error);
+            // Check WhatsApp number
+            const whatsapp = document.getElementById('COBJ1CF2');
+            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
+                return false;
             }
 
-            return false; // Prevent default form submission
+            // Check rating
+            const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
+            if (!rating) {
+                return false;
+            }
+
+            // Check review description
+            const review = document.getElementById('COBJ1CF1');
+            if (!review.value.trim()) {
+                return false;
+            }
+
+            return true;
         }
 
         // Reset validation state when form is reset
@@ -301,7 +232,6 @@
     </script>
 
     <!-- Zoho Analytics Script -->
-    
+   
 </body>
 </html>
-
