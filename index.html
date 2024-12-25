@@ -7,7 +7,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
-        /* Previous styles remain the same */
         :root {
             --gradient-start: #FF416C;
             --gradient-end: #FF4B2B;
@@ -52,32 +51,14 @@
             background: #fff;
         }
 
-        .star-rating {
-            display: flex;
-            flex-direction: row-reverse;
-            justify-content: flex-end;
-            gap: 0.5rem;
+        .form-label {
+            font-weight: 600;
+            color: #2d3436;
+            margin-bottom: 0.5rem;
         }
 
-        .star-rating input {
-            display: none;
-        }
-
-        .star-rating label {
-            font-size: 2rem;
-            color: #ddd;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .star-rating label:hover,
-        .star-rating label:hover ~ label,
-        .star-rating input:checked ~ label {
-            color: #ffd700;
-        }
-
-        .star-rating label:hover {
-            transform: scale(1.2);
+        .required {
+            color: var(--gradient-start);
         }
 
         .btn-submit {
@@ -109,39 +90,13 @@
             background: #e9ecef;
         }
 
-        .success-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #00b894;
-            color: white;
-            padding: 1rem 2rem;
+        .rating-select {
+            padding: 0.8rem;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 184, 148, 0.2);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 0.5rem;
-        }
-
-        .required {
-            color: var(--gradient-start);
+            border: 2px solid #eee;
+            width: 100%;
+            background: #f8f9fa;
+            font-size: 1rem;
         }
 
         @media (max-width: 768px) {
@@ -152,34 +107,6 @@
             .form-container {
                 padding: 1.5rem;
             }
-
-            .star-rating label {
-                font-size: 1.75rem;
-            }
-        }
-        .message-box {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 10px;
-            background: #00b894;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.5s ease-out;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
         }
     </style>
 </head>
@@ -188,16 +115,13 @@
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
             
-            <!-- Modified form to submit directly to Zoho -->
-            <form action="https://crm.zoho.in/crm/WebForm" method="POST" name="WebForm820771000000372329" onsubmit="return checkMandatory820771000000372329()">
-                <!-- Keep all hidden inputs -->
-                <input type="hidden" name="xnQsjsdp" value="2ee8c2aa5e1d2b61ce9975d3cf186c4b5aa2d6b41c419556abbd6d5b6d9c7d31">
-                <input type="hidden" name="zc_gad" id="zc_gad" value="">
-                <input type="hidden" name="xmIwtLD" value="c1389f97d6ac9db24ad89aacd5505cdf9895239f3f6e93ef94e37661d742fbf7e2e60945ec6d563355f807455c06b185">
-                <input type="hidden" name="actionType" value="Q3VzdG9tTW9kdWxlMQ==">
-                <input type='text' style='display:none;' name='returnURL' value='https&#x3a;&#x2f;&#x2f;al-go12.github.io&#x2f;qr-project&#x2f;sucess' > 
-                
-                <!-- Form fields remain the same but with proper names -->
+            <form action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return checkMandatory820771000000372329()' accept-charset='UTF-8'>
+                <input type='text' style='display:none;' name='xnQsjsdp' value='71a555a2f24d4c8db2d6b3cef55b45538b0907704eae56431f62a09858142856'></input> 
+                <input type='hidden' name='zc_gad' id='zc_gad' value=''></input>
+                <input type='text' style='display:none;' name='xmIwtLD' value='7ab2f7bf59c73fab4ce56e76b9cbe2d5b7a9d88c8abfc08efc706ca987c253ad7bef18f3a1f994c92816e228570eb3a5'></input> 
+                <input type='text' style='display:none;' name='actionType' value='Q3VzdG9tTW9kdWxlMQ=='></input>
+                <input type='text' style='display:none;' name='returnURL' value='https://al-go12.github.io/qr-project/sucess'></input>
+
                 <div class="mb-4">
                     <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
                     <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120">
@@ -209,19 +133,15 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label">Rating <span class="required">*</span></label>
-                    <div class="star-rating">
-                        <input type="radio" id="star5" name="COBJ1CF3" value="⭐⭐⭐⭐⭐ (5 Stars)">
-                        <label for="star5" class="fa fa-star"></label>
-                        <input type="radio" id="star4" name="COBJ1CF3" value="⭐⭐⭐⭐ (4 Stars)">
-                        <label for="star4" class="fa fa-star"></label>
-                        <input type="radio" id="star3" name="COBJ1CF3" value="⭐⭐⭐ (3 Stars)">
-                        <label for="star3" class="fa fa-star"></label>
-                        <input type="radio" id="star2" name="COBJ1CF3" value="⭐⭐ (2 Stars)">
-                        <label for="star2" class="fa fa-star"></label>
-                        <input type="radio" id="star1" name="COBJ1CF3" value="⭐ (1 Star)">
-                        <label for="star1" class="fa fa-star"></label>
-                    </div>
+                    <label for="COBJ1CF3" class="form-label">Rating <span class="required">*</span></label>
+                    <select class="rating-select" id="COBJ1CF3" name="COBJ1CF3" onChange='addAriaSelected820771000000372329()'>
+                        <option value="-None-">-None-</option>
+                        <option value="⭐ (1 Star)">⭐ (1 Star)</option>
+                        <option value="⭐⭐ (2 Stars)">⭐⭐ (2 Stars)</option>
+                        <option value="⭐⭐⭐ (3 Stars)">⭐⭐⭐ (3 Stars)</option>
+                        <option value="⭐⭐⭐⭐ (4 Stars)">⭐⭐⭐⭐ (4 Stars)</option>
+                        <option value="⭐⭐⭐⭐⭐ (5 Stars)">⭐⭐⭐⭐⭐ (5 Stars)</option>
+                    </select>
                 </div>
 
                 <div class="mb-4">
@@ -237,37 +157,40 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-    <!-- Zoho Analytics Script -->
-    <script src="https://crm.zohopublic.in/crm/WebFormAnalyticsServeServlet?rid=731efc1af49d76a11c973563575d09bc2572c268ccde8eb888ef8641108cb0be0b4884f797cdccd0d81af81e9c9827bcgidac92cc568e6644ebbb639b4bac47dcbccc07b0262e06f261d82743684dfb93d4gid0a8b587d3c05677d27d0abdb8e9863da393acfd526d65b1668164f15b4562e2bgidf0058654a38de61223c0151a8bc687c7d253f8b2d0692063a228ea69d9ee605d&tw=aac5aeb15bc5c586f1d1b240369ba5746013b4f8df48c594fe3dcdc63d5d1c24"></script>
-
     <script>
-        function checkMandatory820771000000372329() {
-            const mandatoryFields = {
-                'NAME': 'Customer Name',
-                'COBJ1CF1': 'Review Description',
-                'COBJ1CF2': 'WhatsApp Number',
-                'COBJ1CF3': 'Rating'
-            };
+        function addAriaSelected820771000000372329() {
+            var optionElem = event.target;
+            var previousSelectedOption = optionElem.querySelector('[aria-selected=true]');
+            if(previousSelectedOption) {
+                previousSelectedOption.removeAttribute('aria-selected');
+            }
+            optionElem.querySelectorAll('option')[optionElem.selectedIndex].ariaSelected = 'true';
+        }
 
-            for (const [fieldId, fieldLabel] of Object.entries(mandatoryFields)) {
-                const field = document.forms['WebForm820771000000372329'][fieldId];
-                if (!field.value.trim()) {
-                    alert(`${fieldLabel} cannot be empty.`);
-                    field.focus();
-                    return false;
+        function checkMandatory820771000000372329() {
+            var mndFileds = new Array('NAME','COBJ1CF1','COBJ1CF2','COBJ1CF3');
+            var fldLangVal = new Array('Customer Name','Review Description','WhatsApp Number','Rating');
+            for(i=0;i<mndFileds.length;i++) {
+                var fieldObj=document.forms['WebForm820771000000372329'][mndFileds[i]];
+                if(fieldObj) {
+                    if (((fieldObj.value).replace(/^\s+|\s+$/g, '')).length==0) {
+                        alert(fldLangVal[i] +' cannot be empty.'); 
+                        fieldObj.focus();
+                        return false;
+                    } else if(fieldObj.nodeName=='SELECT') {
+                        if(fieldObj.options[fieldObj.selectedIndex].value=='-None-') {
+                            alert(fldLangVal[i] +' cannot be none.'); 
+                            fieldObj.focus();
+                            return false;
+                        }
+                    }
                 }
             }
-
-            if (!document.querySelector('input[name="COBJ1CF3"]:checked')) {
-                alert('Please select a rating.');
-                return false;
-            }
-
             return true;
         }
     </script>
+    
+    <!-- Zoho Analytics Script -->
+    <script id='wf_anal' src='https://crm.zohopublic.in/crm/WebFormAnalyticsServeServlet?rid=da934db503f0c86a9f40ee967a02995c19b40f98b2a2e10fe128d756d2b37ec8f23d0178fd24745041cb38a7039b3ab8gidb50ea65652645a4e85fde1a8fd08cea06bf6d84d9832c9a9f65f4a16616069b3gida13ad099df73320193409bc38cddbc58137ba6d6b453153e7c4bbb8ed95deb47giddc3308f2ccfffa4cf171e75c6d7d7f8c6648e60f62039f074c070027bbc67b1c&tw=048ddd9b6c9d0cf33bf19de50a9b5cc40aacf451aec7828da706abdceb36e71b'></script>
 </body>
 </html>
