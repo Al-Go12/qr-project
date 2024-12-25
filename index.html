@@ -7,6 +7,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
     <style>
+        /* Your existing styles remain the same */
         :root {
             --gradient-start: #FF416C;
             --gradient-end: #FF4B2B;
@@ -135,6 +136,8 @@
                 padding: 1.5rem;
             }
         }
+
+        /* ... rest of your existing styles ... */
     </style>
 </head>
 <body>
@@ -142,13 +145,14 @@
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
             
-            <form id="reviewForm" action='https://crm.zoho.in/crm/WebForm' name='WebForm820771000000372329' method='POST' onSubmit='javascript:document.charset="UTF-8"; return validateForm()' accept-charset='UTF-8' novalidate>
-                <input type='text' style='display:none;' name='xnQsjsdp' value='c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c'></input>
-                <input type='hidden' name='zc_gad' id='zc_gad' value=''></input>
-                <input type='text' style='display:none;' name='xmIwtLD' value='eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736'></input>
-                <input type='text' style='display:none;' name='actionType' value='Q3VzdG9tTW9kdWxlMQ=='></input>
-                <input type='text' style='display:none;' name='returnURL' value='https://al-go12.github.io/qr-project/sucess'></input>
+            <form id="reviewForm" onSubmit="handleSubmit(event)" novalidate>
+                <input type="hidden" name="xnQsjsdp" value="c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c">
+                <input type="hidden" name="zc_gad" id="zc_gad" value="">
+                <input type="hidden" name="xmIwtLD" value="eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736">
+                <input type="hidden" name="actionType" value="Q3VzdG9tTW9kdWxlMQ==">
+                <input type="hidden" name="returnURL" value="https://al-go12.github.io/qr-project/success">
 
+                <!-- Your existing form fields remain the same -->
                 <div class="mb-4">
                     <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
                     <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120" required>
@@ -184,6 +188,7 @@
                     <div class="invalid-feedback">Please enter your review.</div>
                 </div>
 
+
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <button type="reset" class="btn btn-reset me-md-2">Reset</button>
                     <button type="submit" class="btn btn-submit">Submit Review</button>
@@ -193,45 +198,78 @@
     </div>
 
     <script>
-        function validateForm() {
+        async function handleSubmit(event) {
+            event.preventDefault();
             const form = document.getElementById('reviewForm');
-            form.classList.add('was-validated');
+            const errorMessage = document.getElementById('errorMessage');
+            const submitButton = document.getElementById('submitButton');
 
-            // Check name
+            if (!validateForm()) {
+                return;
+            }
+
+            submitButton.disabled = true;
+            errorMessage.style.display = 'none';
+
+            try {
+                const formData = new FormData(form);
+                
+                // Log form data
+                console.log('Submitting form data:', Object.fromEntries(formData));
+
+                // Using proxy service to bypass CORS
+                const response = await fetch('https://cors-anywhere.herokuapp.com/https://crm.zoho.in/crm/WebForm', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Origin': window.location.origin
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.text();
+                console.log('Submission result:', result);
+                
+                window.location.href = formData.get('returnURL');
+            } catch (error) {
+                console.error('Submission error:', error);
+                errorMessage.textContent = 'There was an error submitting your review. Please try again.';
+                errorMessage.style.display = 'block';
+                submitButton.disabled = false;
+            }
+        }
+
+        function validateForm() {
             const name = document.getElementById('NAME');
-            if (!name.value.trim()) {
-                return false;
-            }
-
-            // Check WhatsApp number
             const whatsapp = document.getElementById('COBJ1CF2');
-            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
-                return false;
-            }
-
-            // Check rating
             const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
-            if (!rating) {
-                return false;
-            }
-
-            // Check review description
             const review = document.getElementById('COBJ1CF1');
-            if (!review.value.trim()) {
-                return false;
-            }
+
+            if (!name.value.trim()) return false;
+            if (!/^[0-9]{10}$/.test(whatsapp.value)) return false;
+            if (!rating) return false;
+            if (!review.value.trim()) return false;
 
             return true;
         }
 
-        // Reset validation state when form is reset
         document.querySelector('.btn-reset').addEventListener('click', function() {
             const form = document.getElementById('reviewForm');
             form.classList.remove('was-validated');
         });
     </script>
-
-    <!-- Zoho Analytics Script -->
-  
 </body>
-</html>
+</html>      
+
+
+
+
+
+
+
+
