@@ -333,7 +333,69 @@
             ErrorHandler.hide();
         }
 
+async function validateAndSubmitForm(event) {
+    event.preventDefault();
+    Logger.log('INFO', 'Starting form validation');
 
+    try {
+        const form = document.getElementById('reviewForm');
+        const formData = new FormData(form);
+        
+        const validationResult = validateForm();
+        if (!validationResult.isValid) {
+            throw new Error(validationResult.error);
+        }
+
+        Logger.log('INFO', 'Form validation passed, preparing submission');
+        
+        const submitButton = document.getElementById('submitButton');
+        submitButton.disabled = true;
+        
+        Logger.log('INFO', 'Submitting form to Zoho CRM');
+        
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+
+        const responseText = await response.text();
+        Logger.log('SUCCESS', 'Form submitted successfully', responseText);
+
+        form.reset();
+        submitButton.disabled = false;
+        ErrorHandler.show('Success', 'Form submitted successfully');
+        
+        // Prevent any redirection scripts from executing
+        window.onbeforeunload = function(e) {
+            e.preventDefault();
+            return false;
+        };
+        
+        setTimeout(() => {
+            window.onbeforeunload = null;
+        }, 1000);
+        
+    } catch (error) {
+        Logger.log('ERROR', 'Form submission failed', {
+            message: error.message,
+            stack: error.stack
+        });
+        
+        ErrorHandler.show(
+            'Submission Failed',
+            'There was a problem submitting your review. Please try again.',
+            {
+                errorMessage: error.message,
+                timestamp: new Date().toISOString()
+            }
+        );
+        
+        document.getElementById('submitButton').disabled = false;
+    }
+}
+
+
+        
    async function validateAndSubmitForm(event) {
     event.preventDefault();
     Logger.log('INFO', 'Starting form validation');
@@ -390,33 +452,7 @@
     }
 }
 
-        function validateForm() {
-            const name = document.getElementById('NAME');
-            const whatsapp = document.getElementById('COBJ1CF2');
-            const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
-            const review = document.getElementById('COBJ1CF1');
-
-            Logger.log('INFO', 'Validating form fields');
-
-            if (!name.value.trim()) {
-                return { isValid: false, error: 'Name is required' };
-            }
-
-            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
-                return { isValid: false, error: 'Invalid WhatsApp number' };
-            }
-
-            if (!rating) {
-                return { isValid: false, error: 'Please select a rating' };
-            }
-
-            if (!review.value.trim()) {
-                return { isValid: false, error: 'Review description is required' };
-            }
-
-            Logger.log('INFO', 'All fields validated successfully');
-            return { isValid: true };
-        }
+       
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
