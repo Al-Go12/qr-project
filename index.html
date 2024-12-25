@@ -135,7 +135,19 @@
             .form-container {
                 padding: 1.5rem;
             }
+        }   
+
+
+        .error-message {
+            display: none;
+            background: #fee;
+            color: #c00;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+            border: 1px solid #fcc;
         }
+
 
         /* ... rest of your existing styles ... */
     </style>
@@ -144,7 +156,8 @@
     <div class="container">
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
-            
+            <div id="errorMessage" class="error-message"></div>
+
             <form id="reviewForm" onSubmit="handleSubmit(event)" novalidate>
                 <input type="hidden" name="xnQsjsdp" value="c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c">
                 <input type="hidden" name="zc_gad" id="zc_gad" value="">
@@ -197,82 +210,94 @@
     </div>
 
     <script>
-        // Store button references
-        const submitButton = document.getElementById('submitButton');
-        const resetButton = document.getElementById('resetButton');
-        const errorMessage = document.getElementById('errorMessage');
 
-        async function handleSubmit(event) {
-            event.preventDefault();
-            const form = document.getElementById('reviewForm');
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('reviewForm');
+    const submitButton = document.getElementById('submitButton');
+    const resetButton = document.getElementById('resetButton');
+    const errorMessage = document.getElementById('errorMessage');
 
-            if (!validateForm()) {
-                return;
-            }
+    form.addEventListener('submit', handleSubmit);
 
-            // Disable both buttons during submission
-            submitButton.disabled = true;
-            resetButton.disabled = true;
-            errorMessage.style.display = 'none';
+    async function handleSubmit(event) {
+        event.preventDefault();
 
-            try {
-                const formData = new FormData(form);
-                console.log('Submitting form data:', Object.fromEntries(formData));
+        if (!validateForm()) {
+            return;
+        }
 
-                const response = await fetch('https://cors-anywhere.herokuapp.com/https://crm.zoho.in/crm/WebForm', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Origin': window.location.origin
-                    }
-                });
+        submitButton.disabled = true;
+        resetButton.disabled = true;
+        errorMessage.style.display = 'none';
 
-                console.log('Response status:', response.status);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        try {
+            const formData = new FormData(form);
+            console.log('Submitting form data:', Object.fromEntries(formData));
+
+            const response = await fetch('https://cors-anywhere.herokuapp.com/https://crm.zoho.in/crm/WebForm', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Origin': window.location.origin
                 }
+            });
 
-                const result = await response.text();
-                console.log('Submission result:', result);
-                
-                window.location.href = formData.get('returnURL');
-            } catch (error) {
-                console.error('Submission error:', error);
-                errorMessage.textContent = 'There was an error submitting your review. Please try again.';
-                errorMessage.style.display = 'block';
-                
-                // Re-enable buttons on error
-                submitButton.disabled = false;
-                resetButton.disabled = false;
-            }
-        }
+            console.log('Response status:', response.status);
 
-        function validateForm() {
-            const form = document.getElementById('reviewForm');
-            form.classList.add('was-validated');
-
-            const name = document.getElementById('NAME');
-            const whatsapp = document.getElementById('COBJ1CF2');
-            const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
-            const review = document.getElementById('COBJ1CF1');
-
-            if (!name.value.trim() || 
-                !/^[0-9]{10}$/.test(whatsapp.value) || 
-                !rating || 
-                !review.value.trim()) {
-                return false;
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return true;
+            const result = await response.text();
+            console.log('Submission result:', result);
+
+            window.location.href = formData.get('returnURL');
+        } catch (error) {
+            console.error('Submission error:', error);
+            errorMessage.textContent = 'There was an error submitting your review. Please try again.';
+            errorMessage.style.display = 'block';
+
+            // Re-enable buttons on error
+            submitButton.disabled = false;
+            resetButton.disabled = false;
+        }
+    }
+
+    function validateForm() {
+        const name = document.getElementById('NAME');
+        const whatsapp = document.getElementById('COBJ1CF2');
+        const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
+        const review = document.getElementById('COBJ1CF1');
+
+        // Add Bootstrap validation style
+        form.classList.add('was-validated');
+
+        if (!name.value.trim() ||
+            !/^[0-9]{10}$/.test(whatsapp.value) ||
+            !rating ||
+            !review.value.trim()) {
+            return false;
         }
 
-        // Reset validation state when form is reset
-        resetButton.addEventListener('click', function() {
-            const form = document.getElementById('reviewForm');
-            form.classList.remove('was-validated');
-            errorMessage.style.display = 'none';
-        });
+        return true;
+    }
+
+    // Reset validation state when form is reset
+    resetButton.addEventListener('click', function() {
+        form.classList.remove('was-validated');
+        errorMessage.style.display = 'none';
+    });
+});
+
+
+
+
+
+
+
+
+
+        
     </script>
 </body>
 </html>
