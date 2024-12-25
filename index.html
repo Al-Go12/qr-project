@@ -237,12 +237,11 @@
             <div class="toast-container"></div>
 
             <!-- Modified form tag with proper Zoho CRM attributes -->
-            <form id="reviewForm" 
-                  action="https://crm.zoho.in/crm/WebToCustomModule1" 
-                  name="WebToCustomModule1" 
-                  method="POST" 
-                  accept-charset="UTF-8"
-                  enctype="multipart/form-data">
+          <form id="reviewForm" 
+      action="https://crm.zoho.in/crm/WebToCustomModule1" 
+      method="POST" 
+      accept-charset="UTF-8"
+      enctype="multipart/form-data">
 
                 <!-- Required Zoho CRM hidden fields -->
                 <input type="text" style="display:none;" name="xnQsjsdp" value="c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c">
@@ -309,6 +308,7 @@
 
     <script>
         // Logger utility object
+// Logger utility object
 const Logger = {
     log: function(type, title, details = null) {
         const logEntry = document.createElement('div');
@@ -418,8 +418,29 @@ async function handleFormSubmit(event) {
         formData.forEach((value, key) => formDataObj[key] = value);
         Logger.log('INFO', 'Form data prepared', formDataObj);
 
-        // Submit form directly
+        // Make sure the form action is correct
+        form.action = 'https://crm.zoho.in/crm/WebToCustomModule1';
+        form.method = 'POST';
+
+        // Create a temporary iframe for form submission
+        const iframe = document.createElement('iframe');
+        iframe.name = 'submit_iframe';
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        // Set up form target and submit
+        form.target = 'submit_iframe';
         form.submit();
+
+        // Handle success after a brief delay
+        setTimeout(() => {
+            // Clean up
+            document.body.removeChild(iframe);
+            submitButton.disabled = false;
+            
+            // Redirect to success page
+            window.location.href = form.returnURL.value;
+        }, 2000);
 
         // Log success
         Logger.log('SUCCESS', 'Form submitted', {
