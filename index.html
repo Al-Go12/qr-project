@@ -158,6 +158,75 @@
                 padding: 1.5rem;
             }
         }
+
+
+
+                #responsePanel {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow: auto;
+            display: none;
+            z-index: 1000;
+        }
+
+        #responsePanel pre {
+            color: #00ff00;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+
+        #responsePanel .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #333;
+        }
+
+        #responsePanel .close-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .debug-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .logger-entry {
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .logger-entry.success {
+            border-left: 3px solid #28a745;
+        }
+
+        .logger-entry.error {
+            border-left: 3px solid #dc3545;
+        }
+
+        .logger-entry.info {
+            border-left: 3px solid #17a2b8;
+        }
+
     </style>
 </head>
 <body>
@@ -217,6 +286,22 @@
         </div>
     </div>
 
+
+
+    <div id="responsePanel">
+        <div class="response-header">
+            <span>Response Details</span>
+            <button class="close-btn" onclick="toggleResponsePanel()">×</button>
+        </div>
+        <div id="responseContent"></div>
+    </div>
+
+    <!-- Debug Controls -->
+    <div class="debug-controls">
+        <button class="btn btn-sm btn-dark" onclick="toggleResponsePanel()">Toggle Response Log</button>
+        <button class="btn btn-sm btn-dark ms-2" onclick="clearLogs()">Clear Logs</button>
+    </div>
+
     <script>
         function showToast(message, type = 'success') {
             const toastContainer = document.querySelector('.toast-container');
@@ -263,11 +348,61 @@
             return { isValid: true };
         }
 
+      const Logger = {
+            logs: [],
+            maxLogs: 50,
+
+            log: function(type, message, details = null) {
+                const logEntry = {
+                    timestamp: new Date().toISOString(),
+                    type: type,
+                    message: message,
+                    details: details
+                };
+
+                this.logs.unshift(logEntry);
+                if (this.logs.length > this.maxLogs) {
+                    this.logs.pop();
+                }
+
+                this.updateDisplay();
+                console.log(`[${type}]`, message, details || '');
+            },
+
+            updateDisplay: function() {
+                const responseContent = document.getElementById('responseContent');
+                if (!responseContent) return;
+
+                responseContent.innerHTML = this.logs.map(log => `
+                    <div class="logger-entry ${log.type.toLowerCase()}">
+                        <div><strong>[${log.timestamp.split('T')[1].split('.')[0]}] ${log.type}</strong></div>
+                        <div>${log.message}</div>
+                        ${log.details ? `<pre>${JSON.stringify(log.details, null, 2)}</pre>` : ''}
+                    </div>
+                `).join('');
+            },
+
+            clear: function() {
+                this.logs = [];
+                this.updateDisplay();
+            }
+        };
+
+        function toggleResponsePanel() {
+            const panel = document.getElementById('responsePanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function clearLogs() {
+            Logger.clear();
+        }
+
         async function handleFormSubmit(event) {
             event.preventDefault();
             
             const validation = validateForm();
             if (!validation.isValid) {
+                Logger.log('ERROR', 'Validation failed', validation.error);
                 showToast(validation.error, 'error');
                 return;
             }
@@ -277,28 +412,64 @@
             submitButton.disabled = true;
 
             try {
+                Logger.log('INFO', 'Starting form submission');
                 const formData = new FormData(form);
+                
+                // Log form data being sent
+                const formDataObj = {};
+                formData.forEach((value, key) => formDataObj[key] = value);
+                Logger.log('INFO', 'Form data prepared', formDataObj);
+
                 const response = await fetch('https://crm.zoho.in/crm/WebForm', {
                     method: 'POST',
                     body: formData
                 });
 
+                const responseText = await response.text();
+                Logger.log('INFO', 'Response received', {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries()),
+                    body: responseText
+                });
+
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
+                Logger.log('SUCCESS', 'Form submitted successfully', {
+                    timestamp: new Date().toISOString(),
+                    responseText: responseText
+                });
 
                 showToast('Thank you for your review!');
                 form.reset();
                 form.classList.remove('was-validated');
+
             } catch (error) {
-                console.error('Submission error:', error);
+                Logger.log('ERROR', 'Submission failed', {
+                    error: error.message,
+                    stack: error.stack
+                });
                 showToast('Failed to submit review. Please try again later.', 'error');
             } finally {
                 submitButton.disabled = false;
             }
         }
 
-        document.getElementById('reviewForm').addEventListener('submit', handleFormSubmit);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            Logger.log('INFO', 'Form initialized');
+            document.getElementById('reviewForm').addEventListener('submit', handleFormSubmit);
+            
+            // Show response panel on Ctrl+Shift+R
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                    toggleResponsePanel();
+                }
+            });
+        });
+
 
         // Reset form validation state when form is reset
         document.getElementById('reviewForm').addEventListener('reset', (event) => {
