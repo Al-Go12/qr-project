@@ -6,9 +6,7 @@
     <title>Customer Review Form</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <!-- Previous styles remain same -->
     <style>
-        /* Previous styles remain same */ 
         :root {
             --gradient-start: #FF416C;
             --gradient-end: #FF4B2B;
@@ -127,14 +125,28 @@
             display: block;
         }
 
-        .error-message {
-            display: none;
-            background: #fee;
-            color: #c00;
-            padding: 1rem;
-            margin: 1rem 0;
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .custom-toast {
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 8px;
-            border: 1px solid #fcc;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            max-width: 350px;
+        }
+
+        .success-toast {
+            border-left: 4px solid #28a745;
+        }
+
+        .error-toast {
+            border-left: 4px solid #dc3545;
         }
 
         @media (max-width: 768px) {
@@ -146,338 +158,151 @@
                 padding: 1.5rem;
             }
         }
-
-        .error-toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 350px;
-            background: rgba(220, 53, 69, 0.95);
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: none;
-        }
-        
-        .error-details {
-            display: none;
-            background: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 1rem;
-            margin-top: 1rem;
-            border-radius: 4px;
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-        
-        #debugInfo {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.8);
-            color: #00ff00;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            max-width: 300px;
-            max-height: 200px;
-            overflow: auto;
-            display: none;
-        }
     </style>
 </head>
-<body>   
-
+<body>
     <div class="container">
         <div class="form-container">
             <h2 class="form-title">Share Your Experience</h2>
-            <div id="errorMessage" class="error-message"></div>
-    <!-- Previous HTML structure remains same until form -->
-    <div id="errorToast" class="error-toast">
-        <div class="d-flex justify-content-between">
-            <strong class="error-title">Error</strong>
-            <button type="button" class="btn-close btn-close-white" onclick="hideError()"></button>
+            
+            <div class="toast-container"></div>
+
+            <form id="reviewForm" name="WebForm820771000000372329" accept-charset="UTF-8">
+                <input type="text" style="display:none;" name="xnQsjsdp" value="c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c">
+                <input type="hidden" name="zc_gad" id="zc_gad" value="">
+                <input type="text" style="display:none;" name="xmIwtLD" value="eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736">
+                <input type="text" style="display:none;" name="actionType" value="Q3VzdG9tTW9kdWxlMQ==">
+                <input type="text" style="display:none;" name="returnURL" value="">
+
+                <div class="mb-4">
+                    <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120" required>
+                    <div class="invalid-feedback">Please enter your name.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="COBJ1CF2" class="form-label">WhatsApp Number <span class="required">*</span></label>
+                    <input type="tel" class="form-control" id="COBJ1CF2" name="COBJ1CF2" pattern="[0-9]{10}" maxlength="10" required>
+                    <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Rating <span class="required">*</span></label>
+                    <div class="rating">
+                        <input type="radio" id="star5" name="COBJ1CF3" value="⭐⭐⭐⭐⭐ (5 Stars)" required>
+                        <label for="star5" class="fa fa-star"></label>
+                        <input type="radio" id="star4" name="COBJ1CF3" value="⭐⭐⭐⭐ (4 Stars)">
+                        <label for="star4" class="fa fa-star"></label>
+                        <input type="radio" id="star3" name="COBJ1CF3" value="⭐⭐⭐ (3 Stars)">
+                        <label for="star3" class="fa fa-star"></label>
+                        <input type="radio" id="star2" name="COBJ1CF3" value="⭐⭐ (2 Stars)">
+                        <label for="star2" class="fa fa-star"></label>
+                        <input type="radio" id="star1" name="COBJ1CF3" value="⭐ (1 Star)">
+                        <label for="star1" class="fa fa-star"></label>
+                    </div>
+                    <div class="invalid-feedback">Please select a rating.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label for="COBJ1CF1" class="form-label">Review Description <span class="required">*</span></label>
+                    <textarea class="form-control" id="COBJ1CF1" name="COBJ1CF1" rows="4" required></textarea>
+                    <div class="invalid-feedback">Please enter your review.</div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <button type="reset" class="btn btn-reset me-md-2">Reset</button>
+                    <button type="submit" class="btn btn-submit">Submit Review</button>
+                </div>
+            </form>
         </div>
-        <div class="error-message mt-2"></div>
-        <button class="btn btn-sm btn-light mt-2" onclick="toggleErrorDetails()">Show Details</button>
-        <div class="error-details"></div>
     </div>
-    
-    <div id="debugInfo"></div>
-
-    <form action="https://crm.zoho.in/crm/WebForm" method="POST" id="reviewForm" name="WebForm820771000000372329" onSubmit="return validateForm(event)" accept-charset="UTF-8">
-        <input type="text" style="display:none;" name="xnQsjsdp" value="c6ed1914fa1fc2ae67028a07f01b4aabbfa5f67eb03582a7bceeec1131f8af2c">
-        <input type="hidden" name="zc_gad" id="zc_gad" value="">
-        <input type="text" style="display:none;" name="xmIwtLD" value="eac9e327101f1f82d0c8b7916a00d49e5b71110b921d3169f060f79987fb9165ec09706d5082870be94a08d1336fc736">
-        <input type="text" style="display:none;" name="actionType" value="Q3VzdG9tTW9kdWxlMQ==">
-        <input type="text" style="display:none;" name="returnURL" value="">
-
-        <div class="mb-4">
-            <label for="NAME" class="form-label">Customer Name <span class="required">*</span></label>
-            <input type="text" class="form-control" id="NAME" name="NAME" maxlength="120" required>
-            <div class="invalid-feedback">Please enter your name.</div>
-        </div>
-
-        <div class="mb-4">
-            <label for="COBJ1CF2" class="form-label">WhatsApp Number <span class="required">*</span></label>
-            <input type="tel" class="form-control" id="COBJ1CF2" name="COBJ1CF2" pattern="[0-9]{10}" maxlength="10" required>
-            <div class="invalid-feedback">Please enter a valid 10-digit mobile number.</div>
-        </div>
-
-        <div class="mb-4">
-            <label class="form-label">Rating <span class="required">*</span></label>
-            <div class="rating">
-                <input type="radio" id="star5" name="COBJ1CF3" value="⭐⭐⭐⭐⭐ (5 Stars)" required>
-                <label for="star5" class="fa fa-star"></label>
-                <input type="radio" id="star4" name="COBJ1CF3" value="⭐⭐⭐⭐ (4 Stars)">
-                <label for="star4" class="fa fa-star"></label>
-                <input type="radio" id="star3" name="COBJ1CF3" value="⭐⭐⭐ (3 Stars)">
-                <label for="star3" class="fa fa-star"></label>
-                <input type="radio" id="star2" name="COBJ1CF3" value="⭐⭐ (2 Stars)">
-                <label for="star2" class="fa fa-star"></label>
-                <input type="radio" id="star1" name="COBJ1CF3" value="⭐ (1 Star)">
-                <label for="star1" class="fa fa-star"></label>
-            </div>
-            <div class="invalid-feedback">Please select a rating.</div>
-        </div>
-
-        <div class="mb-4">
-            <label for="COBJ1CF1" class="form-label">Review Description <span class="required">*</span></label>
-            <textarea class="form-control" id="COBJ1CF1" name="COBJ1CF1" rows="4" required></textarea>
-            <div class="invalid-feedback">Please enter your review.</div>
-        </div>
-
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-            <button type="reset" class="btn btn-reset me-md-2" id="resetButton">Reset</button>
-            <button type="submit" class="btn btn-submit" id="submitButton">Submit Review</button>
-        </div>
-    </form>
-</div>
-</div>
 
     <script>
-        // Logging utility
-        const Logger = {
-            logs: [],
-            maxLogs: 100,
-            
-            log: function(type, message, data = null) {
-                const logEntry = {
-                    timestamp: new Date().toISOString(),
-                    type: type,
-                    message: message,
-                    data: data
-                };
-                
-                this.logs.unshift(logEntry);
-                if (this.logs.length > this.maxLogs) {
-                    this.logs.pop();
-                }
-                
-                this.updateDebugDisplay();
-                console.log(`[${type}]`, message, data || '');
-                
-                // Save to localStorage
-                try {
-                    localStorage.setItem('formLogs', JSON.stringify(this.logs));
-                } catch (e) {
-                    console.warn('Failed to save logs to localStorage:', e);
-                }
-            },
-            
-            updateDebugDisplay: function() {
-                const debugDiv = document.getElementById('debugInfo');
-                if (debugDiv) {
-                    debugDiv.innerHTML = this.logs
-                        .slice(0, 5)
-                        .map(log => `[${log.timestamp.split('T')[1].split('.')[0]}] ${log.type}: ${log.message}`)
-                        .join('<br>');
-                }
-            },
-            
-            showDebugPanel: function() {
-                document.getElementById('debugInfo').style.display = 'block';
+        function showToast(message, type = 'success') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}-toast`;
+            toast.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <span>${message}</span>
+                    <button type="button" class="btn-close" onclick="this.parentElement.parentElement.remove()"></button>
+                </div>
+            `;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 5000);
+        }
+
+        function validateForm() {
+            const form = document.getElementById('reviewForm');
+            form.classList.add('was-validated');
+
+            // Check name
+            const name = form.NAME.value.trim();
+            if (!name) {
+                return { isValid: false, error: 'Please enter your name.' };
             }
-        };
 
-        // Error handling utility
-        const ErrorHandler = {
-            show: function(title, message, details = null) {
-                const toast = document.getElementById('errorToast');
-                toast.querySelector('.error-title').textContent = title;
-                toast.querySelector('.error-message').textContent = message;
-                
-                const detailsDiv = toast.querySelector('.error-details');
-                if (details) {
-                    detailsDiv.textContent = JSON.stringify(details, null, 2);
-                }
-                
-                toast.style.display = 'block';
-                Logger.log('ERROR', message, details);
-            },
-            
-            hide: function() {
-                document.getElementById('errorToast').style.display = 'none';
+            // Check WhatsApp number
+            const whatsapp = form.COBJ1CF2.value.trim();
+            if (!whatsapp || !/^[0-9]{10}$/.test(whatsapp)) {
+                return { isValid: false, error: 'Please enter a valid 10-digit WhatsApp number.' };
             }
-        };
 
-        function toggleErrorDetails() {
-            const details = document.querySelector('.error-details');
-            details.style.display = details.style.display === 'none' ? 'block' : 'none';
-        }
-
-        function hideError() {
-            ErrorHandler.hide();
-        }
-
-async function validateAndSubmitForm(event) {
-    event.preventDefault();
-    Logger.log('INFO', 'Starting form validation');
-
-    try {
-        const form = document.getElementById('reviewForm');
-        const formData = new FormData(form);
-        
-        const validationResult = validateForm();
-        if (!validationResult.isValid) {
-            throw new Error(validationResult.error);
-        }
-
-        Logger.log('INFO', 'Form validation passed, preparing submission');
-        
-        const submitButton = document.getElementById('submitButton');
-        submitButton.disabled = true;
-        
-        Logger.log('INFO', 'Submitting form to Zoho CRM');
-        
-        const response = await fetch(form.action, {
-            method: 'POST',
-            body: formData
-        });
-
-        const responseText = await response.text();
-        Logger.log('SUCCESS', 'Form submitted successfully', responseText);
-
-        form.reset();
-        submitButton.disabled = false;
-        ErrorHandler.show('Success', 'Form submitted successfully');
-        
-        // Prevent any redirection scripts from executing
-        window.onbeforeunload = function(e) {
-            e.preventDefault();
-            return false;
-        };
-        
-        setTimeout(() => {
-            window.onbeforeunload = null;
-        }, 1000);
-        
-    } catch (error) {
-        Logger.log('ERROR', 'Form submission failed', {
-            message: error.message,
-            stack: error.stack
-        });
-        
-        ErrorHandler.show(
-            'Submission Failed',
-            'There was a problem submitting your review. Please try again.',
-            {
-                errorMessage: error.message,
-                timestamp: new Date().toISOString()
+            // Check rating
+            const rating = form.querySelector('input[name="COBJ1CF3"]:checked');
+            if (!rating) {
+                return { isValid: false, error: 'Please select a rating.' };
             }
-        );
-        
-        document.getElementById('submitButton').disabled = false;
-    }
-}
 
-
-        
-   async function validateAndSubmitForm(event) {
-    event.preventDefault();
-    Logger.log('INFO', 'Starting form validation');
-
-    try {
-        const form = document.getElementById('reviewForm');
-        const formData = new FormData(form);
-        
-        const validationResult = validateForm();
-        if (!validationResult.isValid) {
-            throw new Error(validationResult.error);
-        }
-
-        Logger.log('INFO', 'Form validation passed, preparing submission');
-        
-        const submitButton = document.getElementById('submitButton');
-        submitButton.disabled = true;
-        
-        Logger.log('INFO', 'Submitting form to Zoho CRM');
-        
-        const response = await fetch(form.action, {
-            method: 'POST',
-            body: formData
-        });
-
-        const responseText = await response.text();
-        Logger.log('INFO', 'Response received', responseText);
-
-        if (!response.ok) {
-            throw new Error(`Server responded with status: ${response.status}`);
-        }
-
-        submitButton.disabled = false;
-        ErrorHandler.show('Success', 'Form submitted successfully', {
-            response: responseText
-        });
-        
-    } catch (error) {
-        Logger.log('ERROR', 'Form submission failed', {
-            message: error.message,
-            stack: error.stack
-        });
-        
-        ErrorHandler.show(
-            'Submission Failed',
-            'There was a problem submitting your review. Please try again.',
-            {
-                errorMessage: error.message,
-                timestamp: new Date().toISOString()
+            // Check review description
+            const review = form.COBJ1CF1.value.trim();
+            if (!review) {
+                return { isValid: false, error: 'Please enter your review.' };
             }
-        );
-        
-        document.getElementById('submitButton').disabled = false;
-    }
-}
 
-       
+            return { isValid: true };
+        }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            Logger.log('INFO', 'Form initialized');
+        async function handleFormSubmit(event) {
+            event.preventDefault();
             
-            // Add form submit handler
-            document.getElementById('reviewForm').addEventListener('submit', validateAndSubmitForm);
-            
-            // Debug mode toggle (press Ctrl+Shift+D)
-            document.addEventListener('keydown', (e) => {
-                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                    Logger.showDebugPanel();
-                }
-            });
-            
-            // Load previous logs
+            const validation = validateForm();
+            if (!validation.isValid) {
+                showToast(validation.error, 'error');
+                return;
+            }
+
+            const form = event.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+
             try {
-                const savedLogs = localStorage.getItem('formLogs');
-                if (savedLogs) {
-                    Logger.logs = JSON.parse(savedLogs);
-                    Logger.updateDebugDisplay();
+                const formData = new FormData(form);
+                const response = await fetch('https://crm.zoho.in/crm/WebForm', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            } catch (e) {
-                console.warn('Failed to load saved logs:', e);
+
+                showToast('Thank you for your review!');
+                form.reset();
+                form.classList.remove('was-validated');
+            } catch (error) {
+                console.error('Submission error:', error);
+                showToast('Failed to submit review. Please try again later.', 'error');
+            } finally {
+                submitButton.disabled = false;
             }
+        }
+
+        document.getElementById('reviewForm').addEventListener('submit', handleFormSubmit);
+
+        // Reset form validation state when form is reset
+        document.getElementById('reviewForm').addEventListener('reset', (event) => {
+            event.target.classList.remove('was-validated');
         });
     </script>
 </body>
