@@ -193,35 +193,69 @@
     </div>
 
     <script>
-        function validateForm() {
+        function handleSubmit(event) {
+            event.preventDefault(); // Prevent immediate form submission
+            
             const form = document.getElementById('reviewForm');
             form.classList.add('was-validated');
+            
+            // Collect form data
+            const formData = {
+                name: document.getElementById('NAME').value.trim(),
+                whatsapp: document.getElementById('COBJ1CF2').value,
+                rating: document.querySelector('input[name="COBJ1CF3"]:checked')?.value,
+                review: document.getElementById('COBJ1CF1').value.trim()
+            };
 
-            // Check name
-            const name = document.getElementById('NAME');
-            if (!name.value.trim()) {
+            // Validation checks
+            let errors = [];
+            
+            if (!formData.name) {
+                errors.push('Name is required');
+            }
+            
+            if (!/^[0-9]{10}$/.test(formData.whatsapp)) {
+                errors.push('Please enter a valid 10-digit WhatsApp number');
+            }
+            
+            if (!formData.rating) {
+                errors.push('Please select a rating');
+            }
+            
+            if (!formData.review) {
+                errors.push('Review description is required');
+            }
+
+            // If there are errors, log them and prevent submission
+            if (errors.length > 0) {
+                console.error('Validation errors:', errors);
                 return false;
             }
 
-            // Check WhatsApp number
-            const whatsapp = document.getElementById('COBJ1CF2');
-            if (!/^[0-9]{10}$/.test(whatsapp.value)) {
-                return false;
+            // If validation passes, log success and allow form submission
+            console.log('Form data:', formData);
+            
+            // Submit the form programmatically
+            try {
+                fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('Form submitted successfully');
+                    window.location.href = document.querySelector('input[name="returnURL"]').value;
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                });
+            } catch (error) {
+                console.error('Submission error:', error);
             }
 
-            // Check rating
-            const rating = document.querySelector('input[name="COBJ1CF3"]:checked');
-            if (!rating) {
-                return false;
-            }
-
-            // Check review description
-            const review = document.getElementById('COBJ1CF1');
-            if (!review.value.trim()) {
-                return false;
-            }
-
-            return true;
+            return false; // Prevent default form submission
         }
 
         // Reset validation state when form is reset
@@ -230,6 +264,7 @@
             form.classList.remove('was-validated');
         });
     </script>
+
 
     <!-- Zoho Analytics Script -->
    
