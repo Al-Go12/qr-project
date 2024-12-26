@@ -238,7 +238,7 @@
 
             <!-- Modified form tag with proper Zoho CRM attributes -->
           <form id="reviewForm" 
-      action="https://crm.zoho.in/crm/WebToCustomModule1" 
+      action="https://crm.zoho.in/crm/WebForm" 
       method="POST" 
       accept-charset="UTF-8"
       enctype="multipart/form-data">
@@ -421,7 +421,7 @@ async function handleFormSubmit(event) {
         localStorage.setItem('lastFormSubmission', JSON.stringify(formDataObj));
 
         // Submit the form directly to Zoho
-        form.action = 'https://crm.zoho.in/crm/WebToCustomModule1';
+        form.action = 'https://crm.zoho.in/crm/WebForm';
         form.method = 'POST';
         form.submit();
 
